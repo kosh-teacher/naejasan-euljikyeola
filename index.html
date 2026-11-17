@@ -1,0 +1,1303 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>내 자산을 지켜라 | 금융보안 디펜스</title>
+<style>
+:root{
+  --bg:#080e20;
+  --panel:#131e38;
+  --panel2:#1b2948;
+  --line:#304264;
+  --text:#f2f6ff;
+  --muted:#a5b5d1;
+  --cyan:#3be3ee;
+  --blue:#477bff;
+  --green:#37e7a2;
+  --red:#ff5274;
+  --gold:#ffc85a;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:radial-gradient(ellipse at top,#182951,var(--bg) 68%);
+  color:var(--text);
+  font-family:"Malgun Gothic","Apple SD Gothic Neo",Arial,sans-serif;
+  line-height:1.6;
+  min-height:100vh;
+}
+button{font:inherit;cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.55}
+button:focus-visible,a:focus-visible{
+  outline:3px solid var(--gold);
+  outline-offset:4px;
+}
+button:active:not(:disabled){transform:scale(.98)}
+.container{max-width:1100px;margin:auto;padding:20px 16px 65px}
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:8px 0 25px;
+}
+.logo{font-size:23px;font-weight:900;letter-spacing:-1px}
+.logo span{color:var(--cyan)}
+.demo{
+  background:#263452;
+  border-radius:25px;
+  padding:6px 12px;
+  font-size:12px;
+  color:var(--muted);
+}
+.screen{display:none}
+.screen.active{display:block;animation:appear .3s ease}
+@keyframes appear{
+  from{opacity:0;transform:translateY(9px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.panel{
+  border:1px solid var(--line);
+  background:var(--panel);
+  border-radius:19px;
+  padding:24px;
+  margin-bottom:18px;
+}
+.primary{
+  border:0;
+  border-radius:13px;
+  padding:15px 24px;
+  color:#061328;
+  background:linear-gradient(110deg,var(--cyan),#59a8ff);
+  font-weight:900;
+}
+.secondary{
+  background:#24375a;
+  color:var(--text);
+  border:1px solid #486083;
+  border-radius:12px;
+  padding:13px 19px;
+  font-weight:800;
+}
+.primary:hover:not(:disabled){filter:brightness(1.1)}
+.secondary:hover:not(:disabled){background:#30466c}
+.intro{
+  text-align:center;
+  padding:44px 24px;
+  background:radial-gradient(circle at 50% 35%,#25477f,#121c35 72%);
+}
+.eyebrow{
+  color:var(--cyan);
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+.intro-icon{
+  font-size:95px;
+  margin:12px 0;
+  animation:float 2.5s ease-in-out infinite;
+}
+@keyframes float{
+  50%{transform:translateY(-10px)}
+}
+.intro h1{
+  font-size:clamp(31px,6vw,53px);
+  line-height:1.3;
+  margin:9px 0 14px;
+}
+.intro h1 span{color:var(--cyan)}
+.intro p{color:var(--muted);font-size:16px}
+.intro .primary{
+  font-size:19px;
+  min-width:220px;
+  margin-top:15px;
+}
+.feature-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+.feature{text-align:center;padding:22px 14px}
+.feature .emoji{font-size:36px}
+.feature strong{display:block;margin:7px 0}
+.feature p{color:var(--muted);font-size:13px;margin:0}
+.rule-note{
+  color:var(--muted);
+  text-align:center;
+  font-size:12px;
+  margin:18px 0;
+}
+.hud{
+  display:grid;
+  grid-template-columns:1.2fr 1fr 1fr;
+  gap:13px;
+  margin-bottom:16px;
+}
+.hud-item{
+  background:var(--panel);
+  border:1px solid var(--line);
+  padding:19px;
+  border-radius:15px;
+}
+.hud-label{font-size:12px;color:var(--muted)}
+.hud-value{
+  font-size:clamp(20px,3vw,29px);
+  font-weight:900;
+  margin:5px 0 0;
+}
+.hud-value.money{color:var(--gold)}
+.hud-value.security{color:var(--cyan)}
+.meter{
+  height:9px;
+  background:#30405c;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:11px;
+}
+.meter>div{
+  width:0;
+  height:100%;
+  border-radius:20px;
+  background:linear-gradient(90deg,#287aff,var(--cyan));
+  transition:width .35s;
+}
+.game-layout{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:18px;
+}
+.round-top{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+  margin-bottom:16px;
+}
+.round-tag{
+  background:#23416b;
+  color:var(--cyan);
+  padding:6px 12px;
+  border-radius:30px;
+  font-size:12px;
+  font-weight:900;
+}
+.streak{font-weight:800;color:var(--gold);font-size:13px}
+.attack{
+  background:linear-gradient(145deg,#501b35,#24182c);
+  border:2px solid #a13b5c;
+  border-radius:19px;
+  padding:25px 20px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  min-height:330px;
+}
+.attack .danger-label{
+  color:#ffb6c4;
+  font-size:12px;
+  letter-spacing:2px;
+  font-weight:900;
+}
+.hacker{
+  font-size:82px;
+  margin:15px 0;
+  filter:drop-shadow(0 0 20px #ff527455);
+}
+.attack h2{font-size:24px;margin:9px 0}
+.attack p{font-size:15px;color:#f4cada;max-width:430px;margin:auto}
+.timer-head{
+  display:flex;
+  justify-content:space-between;
+  margin:17px 0 7px;
+  font-size:13px;
+  font-weight:800;
+}
+.timer-track{
+  height:13px;
+  background:#35243a;
+  border-radius:20px;
+  overflow:hidden;
+}
+.timer-fill{
+  height:100%;
+  width:100%;
+  background:var(--green);
+  transition:width .2s linear;
+}
+.timer-fill.urgent{background:var(--red)}
+.timer-number{color:var(--gold);font-size:19px}
+.card-title{font-size:20px;margin:0 0 6px}
+.card-description{
+  color:var(--muted);
+  font-size:13px;
+  margin:0 0 16px;
+}
+.defense-list{display:grid;gap:10px}
+.defense{
+  text-align:left;
+  background:#1d3153;
+  border:2px solid #3c527a;
+  color:white;
+  border-radius:13px;
+  padding:15px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  min-height:76px;
+}
+.defense:hover:not(:disabled){
+  border-color:var(--cyan);
+  background:#25436b;
+}
+.defense-icon{font-size:29px;flex-shrink:0}
+.defense strong{font-size:15px;display:block}
+.defense small{
+  color:#b4c5dd;
+  font-size:12px;
+  display:block;
+  margin-top:3px;
+}
+.defense.selected-correct{
+  background:#14503f;
+  border-color:var(--green);
+}
+.defense.selected-wrong{
+  background:#59243a;
+  border-color:var(--red);
+}
+.hint-btn{
+  width:100%;
+  margin-top:13px;
+  border:1px dashed #6580ad;
+  background:transparent;
+  color:#bcd3ff;
+  padding:12px;
+  border-radius:10px;
+  font-weight:800;
+}
+.hint-text{
+  color:var(--gold);
+  font-size:13px;
+  margin-top:10px;
+  min-height:18px;
+}
+.character-box{text-align:center}
+.character-emoji{
+  font-size:57px;
+  display:block;
+  margin:7px 0;
+}
+.character-name{font-weight:900;color:var(--cyan)}
+.character-desc{color:var(--muted);font-size:12px}
+.result-panel{
+  text-align:center;
+  padding:34px 22px;
+}
+.result-emoji{font-size:77px}
+.result-panel h2{font-size:28px;margin:8px 0}
+.result-panel p{font-size:15px;color:var(--muted)}
+.result-panel.success h2{color:var(--green)}
+.result-panel.fail h2{color:var(--red)}
+.result-explanation{
+  background:#1a2b49;
+  padding:18px;
+  border-radius:14px;
+  margin:22px 0;
+  text-align:left;
+  font-size:14px;
+}
+.result-explanation strong{color:var(--cyan)}
+.result-explanation p{margin:8px 0;color:#d8e4f5}
+.effect{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+}
+.effect.show{display:flex}
+.effect-shield{
+  font-size:125px;
+  animation:shieldHit .8s both;
+  filter:drop-shadow(0 0 35px #3be3ee);
+}
+.effect-bad{
+  font-size:110px;
+  animation:badHit .8s both;
+  filter:drop-shadow(0 0 35px #ff5274);
+}
+@keyframes shieldHit{
+  0%{transform:scale(.2);opacity:0}
+  45%{transform:scale(1.5);opacity:1}
+  65%{transform:scale(.85) rotate(-9deg)}
+  100%{transform:scale(1.2);opacity:0}
+}
+@keyframes badHit{
+  0%{transform:scale(.5);opacity:0}
+  40%{transform:scale(1.5) rotate(12deg);opacity:1}
+  100%{transform:scale(.8) rotate(-12deg);opacity:0}
+}
+.shake{animation:shake .5s}
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  20%,60%{transform:translateX(-9px)}
+  40%,80%{transform:translateX(9px)}
+}
+.boss-banner{
+  text-align:center;
+  background:linear-gradient(135deg,#532044,#241334);
+  border:2px solid #df5eae;
+  border-radius:20px;
+  padding:29px 20px;
+  margin-bottom:18px;
+}
+.boss-banner h2{font-size:31px;color:#ffc1e7}
+.boss-banner p{color:#efd0e8}
+.boss-banner .icon{font-size:85px}
+.collection-item{
+  border:1px solid var(--line);
+  padding:18px;
+  border-radius:13px;
+  margin:12px 0;
+  background:#192843;
+}
+.collection-item h3{margin:0 0 7px;font-size:17px}
+.collection-item p{color:var(--muted);font-size:13px}
+.collection-item a{
+  color:#79e9ff;
+  font-weight:800;
+  overflow-wrap:anywhere;
+}
+.chip{
+  display:inline-block;
+  border-radius:30px;
+  background:#513b25;
+  color:var(--gold);
+  padding:4px 10px;
+  font-size:11px;
+  margin:4px 0;
+}
+.grade{
+  color:var(--gold);
+  font-size:33px;
+  font-weight:900;
+}
+.score-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin:23px 0;
+}
+.score-box{
+  border:1px solid var(--line);
+  background:#1b2948;
+  padding:15px;
+  border-radius:13px;
+  text-align:center;
+}
+.score-box span{color:var(--muted);font-size:12px}
+.score-box strong{display:block;font-size:22px}
+.button-row{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:20px;
+}
+.hidden{display:none!important}
+.footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:32px;
+}
+@media(max-width:800px){
+  .game-layout{grid-template-columns:1fr}
+  .hud{grid-template-columns:1fr 1fr}
+  .hud-item:first-child{grid-column:1/-1}
+  .feature-grid{grid-template-columns:1fr}
+}
+@media(max-width:500px){
+  .panel{padding:18px}
+  .intro{padding:30px 15px}
+  .attack{min-height:280px;padding:20px 15px}
+  .hacker{font-size:68px}
+  .attack h2{font-size:21px}
+  .score-grid{grid-template-columns:1fr}
+  .defense{min-height:72px}
+  .topbar .logo{font-size:19px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    transition-duration:.01ms!important;
+  }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="topbar">
+    <div class="logo">🛡️ 내 자산을 <span>지켜라</span></div>
+    <div class="demo">금융보안 디펜스 GAME</div>
+  </header>
+
+  <!-- 시작 화면 -->
+  <section id="startScreen" class="screen active">
+    <div class="panel intro">
+      <div class="eyebrow">CYBER DEFENSE MISSION</div>
+      <div class="intro-icon">🛡️</div>
+      <h1>해커의 공격으로부터<br>
+        <span>내 자산을 지켜라!</span>
+      </h1>
+      <p>
+        당신에게 주어진 가상 자산 1,000만 원.<br>
+        해킹 공격을 막고 최강의 금융보안 수호자가 되세요!
+      </p>
+      <button class="primary" onclick="startGame()">
+        ⚔️ 방어 작전 시작!
+      </button>
+      <div class="rule-note">
+        5라운드 · 제한 시간 20초 · 방어 성공 시 보안 게이지 +20%
+      </div>
+    </div>
+
+    <div class="feature-grid">
+      <div class="panel feature">
+        <div class="emoji">💰</div>
+        <strong>1,000만 원 지키기</strong>
+        <p>오답 한 번에 가상 자산 최대 300만 원 손실!</p>
+      </div>
+      <div class="panel feature">
+        <div class="emoji">👾</div>
+        <strong>딥페이크 보스전</strong>
+        <p>5연속 성공하면 특별 스테이지 개방!</p>
+      </div>
+      <div class="panel feature">
+        <div class="emoji">📖</div>
+        <strong>취약점 도감</strong>
+        <p>틀리거나 힌트를 쓴 문제를 다시 학습하세요.</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>📌 게임 방법</h2>
+      <p>① 해커가 공격하는 금융 위기 상황을 확인합니다.</p>
+      <p>② 제한 시간 20초 안에 적절한 방어 카드를 선택합니다.</p>
+      <p>③ 정답이면 자산을 지키고 보안 게이지가 올라갑니다.</p>
+      <p>④ 오답이거나 시간이 끝나면 가상 자산이 감소합니다.</p>
+      <p>⑤ 5연속 방어에 성공하면 최종 보스가 등장합니다.</p>
+    </div>
+  </section>
+
+  <!-- 게임 화면 -->
+  <section id="gameScreen" class="screen">
+    <div class="hud">
+      <div class="hud-item">
+        <div class="hud-label">💰 보호 중인 가상 자산</div>
+        <div class="hud-value money" id="assetValue">10,000,000원</div>
+      </div>
+      <div class="hud-item">
+        <div class="hud-label">🛡️ 보안 게이지</div>
+        <div class="hud-value security" id="securityValue">0%</div>
+        <div class="meter"><div id="securityBar"></div></div>
+      </div>
+      <div class="hud-item">
+        <div class="hud-label">⭐ 현재 보안 레벨</div>
+        <div class="hud-value" id="levelValue">LV.1</div>
+        <div class="hud-label" id="levelName">금융보안 초보</div>
+      </div>
+    </div>
+
+    <div id="bossBanner" class="boss-banner hidden">
+      <div class="icon">👹</div>
+      <h2>FINAL BOSS!</h2>
+      <p>AI 딥페이크 보이스피싱 공격이 시작됩니다!</p>
+    </div>
+
+    <div class="game-layout">
+      <div>
+        <div class="panel">
+          <div class="round-top">
+            <span class="round-tag" id="roundTag">ROUND 1 / 5</span>
+            <span class="streak" id="streak">🔥 연속 방어 0회</span>
+          </div>
+
+          <div class="attack" id="attackArea">
+            <div class="danger-label">⚠ CYBER ATTACK DETECTED</div>
+            <div class="hacker" id="attackEmoji">👾</div>
+            <h2 id="attackTitle"></h2>
+            <p id="attackDescription"></p>
+          </div>
+
+          <div class="timer-head">
+            <span>⏱️ 방어 제한 시간</span>
+            <span class="timer-number" id="timerText">20초</span>
+          </div>
+          <div class="timer-track">
+            <div class="timer-fill" id="timerBar"></div>
+          </div>
+        </div>
+
+        <div class="panel character-box">
+          <span class="character-emoji" id="characterEmoji">🧑‍💻</span>
+          <div class="character-name" id="characterName">금융보안 초보</div>
+          <div class="character-desc">
+            공격을 막고 강력한 수호자로 성장하세요!
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="panel">
+          <h2 class="card-title">🃏 보안 방어 카드를 선택하세요!</h2>
+          <p class="card-description">
+            공격에 가장 알맞은 방어 수단 하나를 선택하세요.
+          </p>
+          <div class="defense-list" id="defenseCards"></div>
+
+          <button class="hint-btn" id="hintButton"
+                  onclick="useHint()">
+            💡 힌트 보기 (취약점 도감에 기록)
+          </button>
+          <div class="hint-text" id="hintText"
+               aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 라운드 판정 -->
+  <section id="roundResultScreen" class="screen">
+    <div class="panel result-panel" id="resultPanel">
+      <div class="result-emoji" id="resultEmoji"></div>
+      <h2 id="resultTitle"></h2>
+      <p id="resultMessage"></p>
+
+      <div class="score-grid">
+        <div class="score-box">
+          <span>현재 자산</span>
+          <strong id="resultAsset"></strong>
+        </div>
+        <div class="score-box">
+          <span>보안 게이지</span>
+          <strong id="resultSecurity"></strong>
+        </div>
+        <div class="score-box">
+          <span>연속 방어</span>
+          <strong id="resultStreak"></strong>
+        </div>
+      </div>
+
+      <div class="result-explanation">
+        <strong>📚 금융보안 학습 포인트</strong>
+        <p id="resultExplanation"></p>
+        <strong>🔎 실생활 대처법</strong>
+        <p id="resultTip"></p>
+      </div>
+
+      <button class="primary" id="nextRoundButton"
+              onclick="nextRound()">
+        다음 라운드 →
+      </button>
+    </div>
+  </section>
+
+  <!-- 최종 결과 -->
+  <section id="endScreen" class="screen">
+    <div class="panel intro">
+      <div class="eyebrow">MISSION COMPLETE</div>
+      <div class="intro-icon" id="endingEmoji">🛡️</div>
+      <h1 id="endingTitle">게임 종료!</h1>
+      <p id="endingDescription"></p>
+      <div class="grade" id="endingGrade"></div>
+    </div>
+
+    <div class="score-grid">
+      <div class="score-box">
+        <span>최종 가상 자산</span>
+        <strong id="finalAsset"></strong>
+      </div>
+      <div class="score-box">
+        <span>방어 성공</span>
+        <strong id="finalWins"></strong>
+      </div>
+      <div class="score-box">
+        <span>보안 레벨</span>
+        <strong id="finalLevel"></strong>
+      </div>
+    </div>
+
+    <div class="panel character-box">
+      <span class="character-emoji" id="finalCharacter"></span>
+      <h2 id="finalCharacterName"></h2>
+      <p id="badgeMessage"></p>
+    </div>
+
+    <div class="button-row">
+      <button class="primary" onclick="showCollection()">
+        📖 나의 취약점 도감
+      </button>
+      <button class="secondary" onclick="startGame()">
+        🔄 다시 도전하기
+      </button>
+    </div>
+  </section>
+
+  <!-- 취약점 도감 -->
+  <section id="collectionScreen" class="screen">
+    <div class="panel">
+      <h1>📖 나의 금융보안 취약점 도감</h1>
+      <p style="color:var(--muted)">
+        실패했거나 힌트를 사용한 공격을 모았습니다.<br>
+        실제 금융사기를 예방하는 방법을 복습해 보세요.
+      </p>
+      <div id="collectionList"></div>
+      <div class="button-row">
+        <button class="primary" onclick="showScreen('endScreen')">
+          ← 결과 화면으로
+        </button>
+        <button class="secondary" onclick="startGame()">
+          다시 도전하기
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    AI 해커톤 · 내 자산을 지켜라<br>
+    본 게임의 자산 손실과 보안 레벨은 모두 가상입니다.<br>
+    실제 금융보안 서비스 신청은 공식 기관에서 별도로 진행해야 합니다.
+  </footer>
+</div>
+
+<div class="effect" id="effect" aria-hidden="true">
+  <div id="effectIcon"></div>
+</div>
+
+<script>
+// 내 자산을 지켜라 - 금융보안 디펜스
+// 단일 HTML 파일, 외부 라이브러리/API 없음
+
+const $ = id => document.getElementById(id);
+
+const INITIAL_ASSET = 10000000;
+const ROUND_SECONDS = 20;
+const DAMAGE = 3000000;
+
+// 공공기관의 공식 안내 또는 서비스 페이지
+const LINKS = {
+  block: "https://www.fsc.go.kr/po010101/87779",
+  msafer: "https://www.msafer.or.kr/",
+  safety: "https://www.fsc.go.kr/po010101/87882"
+};
+
+// 각 카드의 정답 ID는 시나리오별로 정해져 있습니다.
+const scenarios = [
+  {
+    id:"identity",
+    emoji:"🪪",
+    title:"긴급! 신분증 사진 유출!",
+    description:
+      "SNS에 올렸던 신분증 사진이 외부에 유출되었습니다. " +
+      "누군가 내 명의로 대출을 신청하거나 계좌를 만들 수 있습니다!",
+    options:[
+      ["block","🛡️","개인정보노출자 등록 + 금융거래 안심차단",
+       "명의도용 금융거래를 예방한다"],
+      ["otp","🔑","OTP 번호 변경","인증 수단을 바꾼다"],
+      ["ignore","🙈","아무 일도 하지 않기","그냥 기다린다"],
+      ["delete","🗑️","사진만 삭제하기","게시물만 지운다"]
+    ],
+    answer:"block",
+    hint:"명의도용으로 대출이나 계좌가 새로 만들어지는 것을 막아야 해요.",
+    explanation:
+      "개인정보노출자 등록과 여신거래·비대면 계좌개설 " +
+      "안심차단은 명의도용 금융거래를 예방하는 데 도움이 됩니다. " +
+      "유출된 사진을 삭제하는 것만으로는 충분하지 않습니다.",
+    tip:
+      "금융회사에 개인정보 유출을 알리고, " +
+      "개인정보노출자 등록과 금융거래 안심차단을 검토하세요.",
+    link:LINKS.block,
+    linkText:"금융위원회 금융거래 안심차단 안내"
+  },
+  {
+    id:"smishing",
+    emoji:"📦",
+    title:"택배 주소 오류 문자!",
+    description:
+      "'배송 주소가 잘못되었습니다. 아래 링크에서 확인하세요.' " +
+      "라는 문자가 왔습니다. 수상한 인터넷 주소가 들어 있습니다.",
+    options:[
+      ["click","🔗","문자 속 URL 열기","바로 주소를 입력한다"],
+      ["verify","🛡️","링크 누르지 않고 공식 배송사에서 확인",
+       "공식 앱이나 사이트로 조회한다"],
+      ["reply","💬","문자에 개인정보 답장","이름과 주소를 보낸다"],
+      ["install","📲","문자가 안내하는 앱 설치","배송 확인 앱을 설치한다"]
+    ],
+    answer:"verify",
+    hint:"문자에 포함된 주소가 아니라 직접 찾은 공식 경로를 이용하세요.",
+    explanation:
+      "택배 사칭 문자는 가짜 사이트로 유도하여 개인정보를 " +
+      "탈취하거나 악성 앱 설치를 유도할 수 있습니다.",
+    tip:
+      "수상한 URL을 열지 말고 배송사 공식 앱이나 " +
+      "공식 사이트에서 운송장 정보를 확인하세요.",
+    link:LINKS.safety,
+    linkText:"금융위원회 스미싱 피해 예방 안내"
+  },
+  {
+    id:"phone",
+    emoji:"📱",
+    title:"내 명의로 알뜰폰 개통 시도!",
+    description:
+      "신청한 적 없는 휴대전화 개통 알림이 도착했습니다. " +
+      "누군가 내 명의를 도용해 휴대전화를 개통하려는 것 같습니다!",
+    options:[
+      ["msafer","🛡️","엠세이퍼 가입제한 서비스",
+       "명의도용 휴대전화 개통을 차단한다"],
+      ["transfer","💸","다른 계좌로 돈 보내기","돈을 먼저 옮긴다"],
+      ["password","🔐","쇼핑몰 비밀번호만 변경","쇼핑몰 계정만 바꾼다"],
+      ["wait","😴","일단 무시하기","계속 지켜본다"]
+    ],
+    answer:"msafer",
+    hint:"휴대전화 명의도용 가입을 막는 공식 서비스를 찾아보세요.",
+    explanation:
+      "엠세이퍼(Msafer)는 본인 명의의 통신서비스 가입 " +
+      "현황 조회 및 이동전화 가입제한 기능을 제공합니다.",
+    tip:
+      "엠세이퍼에서 본인 명의 가입 현황을 확인하고 " +
+      "필요하면 가입제한을 신청하세요.",
+    link:LINKS.msafer,
+    linkText:"엠세이퍼 공식 홈페이지"
+  },
+  {
+    id:"banking",
+    emoji:"💻",
+    title:"모르는 기기에서 계좌 접근!",
+    description:
+      "내가 사용하지 않은 기기에서 금융 계좌에 접근한 " +
+      "정황을 발견했습니다. 무단 이체가 우려되는 상황입니다.",
+    options:[
+      ["delete","🗑️","알림을 삭제하기","불편한 알림을 지운다"],
+      ["stop","🚨","은행에 즉시 신고하고 거래 제한 요청",
+       "계좌를 보호하고 추가 피해를 막는다"],
+      ["share","📢","계좌번호를 공개 게시","SNS에 계좌를 공개한다"],
+      ["later","⏳","내일까지 기다리기","내일 확인한다"]
+    ],
+    answer:"stop",
+    hint:"추가 피해를 막도록 금융회사에 즉시 알리는 행동이 필요합니다.",
+    explanation:
+      "계좌에 대한 무단 접근이나 이체가 의심되면 " +
+      "거래 금융회사에 즉시 알리고 계좌 보호 조치를 요청해야 합니다.",
+    tip:
+      "은행 공식 고객센터에 연락해 사고 신고 및 " +
+      "필요한 거래 제한 조치를 문의하세요. 실제 피해가 " +
+      "발생했다면 지급정지 등 긴급 조치를 요청하세요.",
+    link:LINKS.safety,
+    linkText:"금융위원회 피해 예방 안내"
+  },
+  {
+    id:"otp",
+    emoji:"🔑",
+    title:"OTP 인증번호를 알려달라고?",
+    description:
+      "은행 직원이라는 사람이 전화로 계좌 보안 점검을 " +
+      "해주겠다며 OTP 인증번호를 알려달라고 요구합니다.",
+    options:[
+      ["tell","📞","직원에게 OTP 번호 전달","요청한 번호를 알려준다"],
+      ["screen","📷","OTP 화면 사진 전송","인증번호 사진을 보낸다"],
+      ["protect","🛡️","인증번호 제공 거절 + 공식 은행 확인",
+       "통화를 끊고 직접 은행에 확인한다"],
+      ["sms","💬","문자로 OTP 전달","문자에 인증번호를 적는다"]
+    ],
+    answer:"protect",
+    hint:"OTP는 거래를 승인하는 중요한 인증정보입니다.",
+    explanation:
+      "OTP 인증번호는 제3자에게 전달하면 안 됩니다. " +
+      "은행 직원을 사칭한 사람이 전화로 인증정보를 " +
+      "요구하는 것은 금융사기 위험 신호입니다.",
+    tip:
+      "인증번호를 알려주지 말고 통화를 종료한 뒤 " +
+      "은행 공식 앱 또는 공식 고객센터로 확인하세요.",
+    link:LINKS.safety,
+    linkText:"금융위원회 금융사기 예방 정보"
+  }
+];
+
+const bossScenario = {
+  id:"deepfake",
+  emoji:"👹",
+  title:"최종 보스! AI 딥페이크 보이스피싱!",
+  description:
+    "가족의 목소리와 똑같은 전화가 왔습니다. " +
+    "'급하게 돈이 필요하니 지금 이 계좌로 보내줘!' " +
+    "라고 말합니다. 목소리는 진짜 가족처럼 들립니다.",
+  options:[
+    ["send","💸","목소리를 믿고 즉시 송금",
+     "가족 목소리니까 바로 보낸다"],
+    ["check","🛡️","통화 종료 후 기존 연락처로 직접 확인",
+     "다른 수단으로 가족의 신원을 확인한다"],
+    ["otp","🔑","OTP 번호를 알려주기",
+     "요청에 따라 인증번호를 전달한다"],
+    ["app","📲","상대가 보낸 원격제어 앱 설치",
+     "문제 해결용 앱을 설치한다"]
+  ],
+  answer:"check",
+  hint:"AI는 목소리를 흉내 낼 수 있어요. 목소리만으로 신원을 믿지 마세요.",
+  explanation:
+    "AI 음성 복제 기술을 악용하면 실제 가족이나 " +
+    "지인의 목소리처럼 들리는 통화를 만들 수 있습니다. " +
+    "목소리만 믿지 말고 기존에 알고 있던 연락처로 " +
+    "직접 다시 확인하는 것이 중요합니다.",
+  tip:
+    "일단 전화를 끊고 원래 저장된 가족 전화번호로 " +
+    "직접 연락하세요. 송금 전 반드시 본인을 확인하세요.",
+  link:LINKS.safety,
+  linkText:"금융위원회 금융사기 예방 안내"
+};
+
+let asset = INITIAL_ASSET;
+let security = 0;
+let roundIndex = 0;
+let streak = 0;
+let wins = 0;
+let bossWon = false;
+let phase = "ready";
+let timer = null;
+let timeLeft = ROUND_SECONDS;
+let deadline = 0;
+let currentScenario = null;
+let usedHint = false;
+let selectedAnswer = null;
+let collection = new Map();
+
+function won(value) {
+  return Math.round(value).toLocaleString("ko-KR")+"원";
+}
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(el=>{
+    el.classList.remove("active");
+  });
+  $(id).classList.add("active");
+  window.scrollTo(0,0);
+}
+
+function startGame() {
+  clearInterval(timer);
+  asset = INITIAL_ASSET;
+  security = 0;
+  roundIndex = 0;
+  streak = 0;
+  wins = 0;
+  bossWon = false;
+  collection = new Map();
+  phase = "ready";
+  $("bossBanner").classList.add("hidden");
+  loadRound();
+}
+
+function getLevel() {
+  return Math.min(5,Math.floor(security/20)+1);
+}
+
+function updateHUD() {
+  $("assetValue").textContent=won(asset);
+  $("securityValue").textContent=security+"%";
+  $("securityBar").style.width=security+"%";
+  $("levelValue").textContent="LV."+getLevel();
+  $("streak").textContent="🔥 연속 방어 "+streak+"회";
+
+  let name="금융보안 초보";
+  let emoji="🧑‍💻";
+
+  if(security>=40){
+    name="보안 견습생";
+    emoji="🥷";
+  }
+  if(security>=80){
+    name="사이버 방패 기사";
+    emoji="🦸";
+  }
+  if(bossWon){
+    name="철벽 수호자";
+    emoji="🦸‍♂️";
+  }
+
+  $("levelName").textContent=name;
+  $("characterName").textContent=name;
+  $("characterEmoji").textContent=emoji;
+}
+
+function loadRound() {
+  clearInterval(timer);
+
+  currentScenario=roundIndex<scenarios.length
+    ?scenarios[roundIndex]
+    :bossScenario;
+
+  usedHint=false;
+  selectedAnswer=null;
+  phase="playing";
+  timeLeft=ROUND_SECONDS;
+
+  const isBoss=roundIndex===scenarios.length;
+
+  $("bossBanner").classList.toggle("hidden",!isBoss);
+  $("roundTag").textContent=isBoss
+    ?"FINAL BOSS"
+    :"ROUND "+(roundIndex+1)+" / 5";
+
+  $("attackEmoji").textContent=currentScenario.emoji;
+  $("attackTitle").textContent=currentScenario.title;
+  $("attackDescription").textContent=currentScenario.description;
+
+  $("hintText").textContent="";
+  $("hintButton").disabled=false;
+
+  const box=$("defenseCards");
+  box.innerHTML="";
+
+  currentScenario.options.forEach(option=>{
+    const btn=document.createElement("button");
+    btn.className="defense";
+    btn.dataset.answer=option[0];
+
+    const icon=document.createElement("span");
+    icon.className="defense-icon";
+    icon.textContent=option[1];
+
+    const info=document.createElement("span");
+    const title=document.createElement("strong");
+    const sub=document.createElement("small");
+
+    title.textContent=option[2];
+    sub.textContent=option[3];
+    info.append(title,sub);
+    btn.append(icon,info);
+
+    btn.addEventListener("click",()=>{
+      chooseDefense(option[0]);
+    });
+
+    box.appendChild(btn);
+  });
+
+  updateHUD();
+  showScreen("gameScreen");
+  startTimer();
+}
+
+function startTimer() {
+  clearInterval(timer);
+
+  deadline=performance.now()+ROUND_SECONDS*1000;
+  timeLeft=ROUND_SECONDS;
+  renderTimer();
+
+  timer=setInterval(()=>{
+    if(phase!=="playing"){
+      clearInterval(timer);
+      return;
+    }
+
+    const remaining=(deadline-performance.now())/1000;
+    timeLeft=Math.max(0,remaining);
+    renderTimer();
+
+    if(timeLeft<=0){
+      resolveRound(null,true);
+    }
+  },100);
+}
+
+function renderTimer() {
+  const percent=Math.max(
+    0,Math.min(100,timeLeft/ROUND_SECONDS*100)
+  );
+
+  $("timerText").textContent=Math.ceil(timeLeft)+"초";
+  $("timerBar").style.width=percent+"%";
+  $("timerBar").classList.toggle("urgent",timeLeft<=5);
+}
+
+function useHint() {
+  if(phase!=="playing" || usedHint)return;
+
+  usedHint=true;
+  $("hintText").textContent="💡 "+currentScenario.hint;
+  $("hintButton").disabled=true;
+  $("hintButton").textContent="💡 힌트 사용 완료";
+
+  recordWeakness(currentScenario,"힌트 사용");
+}
+
+function chooseDefense(answer) {
+  if(phase!=="playing")return;
+  resolveRound(answer,false);
+}
+
+function recordWeakness(scenario,reason) {
+  const previous=collection.get(scenario.id);
+
+  if(previous){
+    if(!previous.reasons.includes(reason)){
+      previous.reasons.push(reason);
+    }
+  }else{
+    collection.set(scenario.id,{
+      scenario,
+      reasons:[reason]
+    });
+  }
+}
+
+function resolveRound(answer,timedOut) {
+  if(phase!=="playing")return;
+
+  // 이중 클릭이나 시간이 끝난 뒤의 추가 판정을 차단
+  phase="resolved";
+  clearInterval(timer);
+
+  selectedAnswer=answer;
+  const correct=!timedOut &&
+    answer===currentScenario.answer;
+
+  document.querySelectorAll(".defense").forEach(btn=>{
+    btn.disabled=true;
+
+    if(btn.dataset.answer===currentScenario.answer){
+      btn.classList.add("selected-correct");
+    }
+    if(btn.dataset.answer===answer && !correct){
+      btn.classList.add("selected-wrong");
+    }
+  });
+
+  if(correct){
+    wins++;
+    streak++;
+    security=Math.min(100,security+20);
+    if(roundIndex===scenarios.length){
+      bossWon=true;
+    }
+  }else{
+    streak=0;
+    security=Math.max(0,security-10);
+    asset=Math.max(0,asset-DAMAGE);
+
+    recordWeakness(
+      currentScenario,
+      timedOut?"시간 초과":"잘못된 방어 카드 선택"
+    );
+  }
+
+  updateHUD();
+  showEffect(correct);
+
+  // 화면 효과가 끝나면 결과를 표시
+  setTimeout(()=>{
+    renderRoundResult(correct,timedOut);
+  },850);
+}
+
+function showEffect(correct) {
+  const effect=$("effect");
+  const icon=$("effectIcon");
+
+  icon.textContent=correct?"🛡️💥":"💥👾";
+  icon.className=correct?"effect-shield":"effect-bad";
+
+  effect.classList.add("show");
+
+  if(!correct){
+    document.body.classList.add("shake");
+  }
+
+  setTimeout(()=>{
+    effect.classList.remove("show");
+    document.body.classList.remove("shake");
+  },800);
+}
+
+function renderRoundResult(correct,timedOut) {
+  const panel=$("resultPanel");
+  panel.className="panel result-panel "+(correct?"success":"fail");
+
+  $("resultEmoji").textContent=correct?"🛡️✨":"💥";
+
+  if(correct){
+    $("resultTitle").textContent=
+      roundIndex===scenarios.length
+        ?"🏆 최종 보스 격파!"
+        :"완벽한 방어입니다!";
+
+    $("resultMessage").textContent=
+      roundIndex===scenarios.length
+        ?"딥페이크 공격을 간파했습니다! 철벽 수호자 칭호 획득!"
+        :"자산 방어 성공! 보안 게이지가 20% 상승했습니다.";
+  }else{
+    $("resultTitle").textContent=timedOut
+      ?"⏰ 방어 시간 초과!"
+      :"🚨 해킹 방어 실패!";
+
+    $("resultMessage").textContent=
+      "가상 자산 300만 원의 피해가 발생했습니다. "+
+      "올바른 대처 방법을 배워 보세요.";
+  }
+
+  $("resultAsset").textContent=won(asset);
+  $("resultSecurity").textContent=security+"%";
+  $("resultStreak").textContent=streak+"회";
+
+  $("resultExplanation").textContent=currentScenario.explanation;
+  $("resultTip").textContent=currentScenario.tip;
+
+  $("nextRoundButton").textContent=
+    roundIndex===scenarios.length
+      ?"🏆 최종 결과 보기"
+      :roundIndex===scenarios.length-1
+        ?streak===5
+          ?"👹 최종 보스 도전!"
+          :"📊 최종 결과 보기"
+        :"다음 라운드 →";
+
+  showScreen("roundResultScreen");
+}
+
+function nextRound() {
+  if(phase!=="resolved")return;
+
+  if(roundIndex===scenarios.length){
+    endGame();
+    return;
+  }
+
+  if(roundIndex===scenarios.length-1){
+    if(streak===5){
+      roundIndex++;
+      loadRound();
+    }else{
+      endGame();
+    }
+    return;
+  }
+
+  roundIndex++;
+  loadRound();
+}
+
+function endGame() {
+  clearInterval(timer);
+  phase="ended";
+
+  let grade;
+  let title;
+  let emoji;
+  let description;
+
+  if(bossWon){
+    grade="S RANK";
+    title="🏆 철벽 수호자 탄생!";
+    emoji="🦸‍♂️";
+    description=
+      "5연속 방어 성공과 딥페이크 보스 격파! "+
+      "모든 가상 자산을 지켜냈습니다.";
+  }else if(wins>=4){
+    grade="A RANK";
+    title="🛡️ 훌륭한 금융보안 수호자!";
+    emoji="🦸";
+    description=
+      "여러 위협을 막아냈습니다. "+
+      "취약점을 복습하면 더 강해질 수 있어요.";
+  }else if(wins>=2){
+    grade="B RANK";
+    title="⚔️ 보안 실력이 성장하고 있어요!";
+    emoji="🥷";
+    description=
+      "좋은 시작입니다. 실수한 상황을 다시 학습해 보세요.";
+  }else{
+    grade="C RANK";
+    title="📚 금융보안 훈련이 더 필요해요!";
+    emoji="🧑‍💻";
+    description=
+      "괜찮아요! 취약점 도감에서 대처법을 배우고 다시 도전하세요.";
+  }
+
+  $("endingEmoji").textContent=emoji;
+  $("endingTitle").textContent=title;
+  $("endingDescription").textContent=description;
+  $("endingGrade").textContent=grade;
+
+  $("finalAsset").textContent=won(asset);
+  $("finalWins").textContent=
+    wins+" / "+(bossWon?6:5)+"회";
+  $("finalLevel").textContent="LV."+getLevel();
+
+  $("finalCharacter").textContent=emoji;
+  $("finalCharacterName").textContent=bossWon
+    ?"👑 철벽 수호자"
+    :grade==="A RANK"
+      ?"사이버 방패 기사"
+      :grade==="B RANK"
+        ?"보안 견습생"
+        :"금융보안 초보";
+
+  $("badgeMessage").textContent=bossWon
+    ?"🏅 특별 칭호 획득: 철벽 수호자"
+    :"5라운드를 모두 연속 성공하고 보스까지 클리어하면 특별 칭호를 얻습니다.";
+
+  showScreen("endScreen");
+}
+
+function showCollection() {
+  const box=$("collectionList");
+  box.innerHTML="";
+
+  if(collection.size===0){
+    const empty=document.createElement("div");
+    empty.className="panel";
+    empty.innerHTML=`
+      <h2>🎉 취약점이 발견되지 않았습니다!</h2>
+      <p>힌트 없이 모든 일반 라운드를 방어했어요.</p>
+    `;
+    box.appendChild(empty);
+  }else{
+    collection.forEach(item=>{
+      const s=item.scenario;
+      const card=document.createElement("div");
+      card.className="collection-item";
+
+      const title=document.createElement("h3");
+      title.textContent=s.emoji+" "+s.title;
+
+      const chip=document.createElement("span");
+      chip.className="chip";
+      chip.textContent=item.reasons.join(" · ");
+
+      const explanation=document.createElement("p");
+      explanation.textContent="📚 "+s.explanation;
+
+      const tip=document.createElement("p");
+      tip.textContent="✅ 대처법: "+s.tip;
+
+      const link=document.createElement("a");
+      link.href=s.link;
+      link.target="_blank";
+      link.rel="noopener noreferrer";
+      link.textContent="🔗 "+s.linkText+" ↗";
+
+      card.append(title,chip,explanation,tip,link);
+      box.appendChild(card);
+    });
+  }
+
+  showScreen("collectionScreen");
+}
+</script>
+</body>
+</html>
